@@ -28,8 +28,45 @@ def create_database(connection, query):
         print(f"The error '{e}' occurred")
 
 
-connection = create_connection("localhost", "root", "Splinter222", "sm_app")
+# Function for run SQL query
+def execute_query(connection, query):
+    cursor = connection.cursor()
+    try:
+        cursor.execute(query)
+        connection.commit()
+        print("Query executed successfully")
+    except Error as e:
+        print(f"The error '{e}' occurred")
 
+
+create_users_table = """
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT, 
+  name TEXT NOT NULL, 
+  age INT, 
+  gender TEXT, 
+  nationality TEXT, 
+  PRIMARY KEY (id)
+) ENGINE = InnoDB
+"""
+
+create_posts_table = """
+CREATE TABLE IF NOT EXISTS posts (
+  id INT AUTO_INCREMENT, 
+  title TEXT NOT NULL, 
+  description TEXT NOT NULL, 
+  user_id INTEGER NOT NULL, 
+  FOREIGN KEY fk_user_id (user_id) REFERENCES users(id), 
+  PRIMARY KEY (id)
+) ENGINE = InnoDB
+"""
+
+
+
+
+connection = create_connection("localhost", "root", "Splinter222", "sm_app")
+execute_query(connection, create_users_table)
+execute_query(connection, create_posts_table)
 
 # create_database_query = "CREATE DATABASE sm_app"
 # create_database(connection, create_database_query)
